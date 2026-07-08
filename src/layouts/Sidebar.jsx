@@ -7,7 +7,6 @@ export default function Sidebar({ activeNav, onNavChange }) {
         <div className="logo-icon">⚡</div>
         <div className="logo-text">
           LabSim Africa
-          <small>Powered by Claude</small>
         </div>
       </div>
 
@@ -18,7 +17,7 @@ export default function Sidebar({ activeNav, onNavChange }) {
           className={`nav-item ${activeNav === id ? 'active' : ''}`}
           onClick={() => onNavChange(id)}
         >
-          <span className="ni-icon">{icon}</span>
+          {icon ? <span className="ni-icon">{icon}</span> : null}
           <span>{label}</span>
         </div>
       ))}

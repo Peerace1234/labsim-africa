@@ -1,10 +1,29 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import '../styles/Topbar.css';
 
 export default function Topbar({ pageTitle, pageSubtitle }) {
   const [showHelp, setShowHelp] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (!token) return;
+    (async () => {
+      try {
+        const base = import.meta.env.VITE_API_BASE || '';
+        const res = await fetch(base + '/api/profile', {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        if (!res.ok) return; // ignore
+        const data = await res.json().catch(() => ({}));
+        if (data.user) setUser(data.user);
+      } catch (e) {
+        console.error('Could not fetch profile', e);
+      }
+    })();
+  }, []);
 
   return (
     <header className="topbar">
@@ -36,7 +55,7 @@ export default function Topbar({ pageTitle, pageSubtitle }) {
           title="User Menu"
           onClick={() => setShowProfile(!showProfile)}
         >
-          Profile
+          {user ? user.name : 'Profile'}
         </button>
       </div>
 
@@ -128,8 +147,8 @@ export default function Topbar({ pageTitle, pageSubtitle }) {
             <div className="modal-body">
               <div className="profile-info">
                 <div className="profile-avatar">👤</div>
-                <h3>Student User</h3>
-                <p className="profile-email">student@labsim.com</p>
+                <h3>{user ? user.name : 'Student User'}</h3>
+                <p className="profile-email">{user ? user.email : 'student@labsim.com'}</p>
               </div>
               
               <div className="profile-stats">
@@ -156,7 +175,13 @@ export default function Topbar({ pageTitle, pageSubtitle }) {
                 </a>
               </div>
 
-              <button className="logout-btn">Logout</button>
+              <button className="logout-btn" onClick={() => {
+                localStorage.removeItem('token');
+                localStorage.removeItem('labsim_hasEntered');
+                localStorage.removeItem('labsim_activeNav');
+                // reload to landing
+                window.location.href = '/';
+              }}>Logout</button>
             </div>
           </div>
         </div>

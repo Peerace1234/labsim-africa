@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import '../styles/Landing.css';
 
-export default function Landing({ onEnter }) {
+export default function Landing({ onEnter, onNavigate }) {
   const [email, setEmail] = useState('');
   const [submitted, setSubmitted] = useState(false);
 
@@ -75,9 +75,21 @@ export default function Landing({ onEnter }) {
 
             <p className="hero-subtext">For African students. By educators.</p>
 
-            <button onClick={() => onEnter && onEnter()} className="demo-button">
-              Check this page
-            </button>
+            <div className="hero-ctas">
+              <button
+                onClick={() => onNavigate ? onNavigate('signup') : (onEnter && onEnter())}
+                className="primary-cta"
+              >
+                Create account
+              </button>
+
+              <button
+                onClick={() => onNavigate ? onNavigate('login') : (onEnter && onEnter())}
+                className="secondary-cta"
+              >
+                Sign in
+              </button>
+            </div>
           </div>
 
           <div className="hero-visual">
@@ -242,20 +254,26 @@ export default function Landing({ onEnter }) {
       </section>
 
       {/* CTA Section */}
-      <section className="cta">
-        <div className="cta-content">
+      <section className="cta-section">
+        <div className="cta-box">
           <h2>Ready to Transform Your Learning?</h2>
-          <p>Join thousands of students building real skills in digital labs</p>
-          <form className="cta-form" onSubmit={(e) => handleWaitlistSubmit(e, true)}>
-            <input
-              type="email"
-              placeholder="your@email.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-            <button type="submit">Join Waitlist</button>
-          </form>
+          <p>Get instant access to 30+ lab modules, free and premium courses</p>
+          <div className="cta-buttons-group">
+            <button
+              onClick={() => onNavigate ? onNavigate('signup') : (onEnter && onEnter())}
+              className="primary-cta large"
+            >
+              Create Free Account
+            </button>
+            <div className="cta-divider">or</div>
+            <button
+              onClick={() => onNavigate ? onNavigate('login') : (onEnter && onEnter())}
+              className="secondary-cta large"
+            >
+              Sign in to existing account
+            </button>
+          </div>
+          <p className="cta-subtext">No credit card required. Start learning in seconds.</p>
         </div>
       </section>
     </div>

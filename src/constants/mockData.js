@@ -1,10 +1,12 @@
 // Mock Data for LabSim Africa MVP
 
 export const navigationItems = [
-  { id: "home", icon: "🏠", label: "Home", badge: null },
-  { id: "labs", icon: "⚗", label: "Labs", badge: null },
-  { id: "tutor", icon: "🧠", label: "AI Tutor (ZARA)", badge: null },
-  { id: "quiz", icon: "❓", label: "Quiz", badge: null },
+  { id: "home", icon: "", label: "Home", badge: null },
+  { id: "labs", icon: "", label: "Labs", badge: null },
+  { id: "tutor", icon: "", label: "AI Tutor (ZARA)", badge: null },
+  { id: "quiz", icon: "", label: "Quiz", badge: null },
+  { id: "signup", icon: "", label: "Sign up", badge: null },
+  { id: "login", icon: "", label: "Login", badge: null },
 ];
 
 export const labModules = [
@@ -14,7 +16,10 @@ export const labModules = [
     title: "Digital Logic Gates",
     description: "NAND, AND, OR, XOR gate simulator with real IC part numbers",
     tier: "free",
-    icon: "⚡",
+    icon: "",
+    instructor: "Dr. A. Mensah",
+    rating: 4.7,
+    priceCents: 0,
     progress: 0,
     category: "electronics",
   },
@@ -23,7 +28,10 @@ export const labModules = [
     title: "Circuit Analysis",
     description: "Build and analyze circuits with real-time measurements",
     tier: "coming-soon",
-    icon: "🔌",
+    icon: "",
+    instructor: "Eng. N. Okoro",
+    rating: 4.5,
+    priceCents: 0,
     progress: 0,
     category: "electronics",
   },
@@ -32,7 +40,10 @@ export const labModules = [
     title: "Microcontrollers",
     description: "Program and simulate microcontroller behavior",
     tier: "locked",
-    icon: "💻",
+    icon: "",
+    instructor: "Prof. K. Adu",
+    rating: 4.6,
+    priceCents: 1999,
     progress: 0,
     category: "electronics",
   },
@@ -41,7 +52,10 @@ export const labModules = [
     title: "Embedded Systems",
     description: "Full embedded system design and testing",
     tier: "locked",
-    icon: "🤖",
+    icon: "",
+    instructor: "Dr. S. Adebayo",
+    rating: 4.8,
+    priceCents: 2499,
     progress: 0,
     category: "electronics",
   },
@@ -379,36 +393,157 @@ export const quizQuestions = [
 ];
 
 export const tutorTopics = [
-  { id: "nand", label: "NAND Gate", emoji: "⊼" },
-  { id: "xor", label: "XOR Gate", emoji: "⊕" },
-  { id: "full-adder", label: "Full Adder", emoji: "➕" },
-  { id: "7-segment", label: "7-Segment Display", emoji: "🔢" },
+  {
+    id: "python-chatgpt",
+    label: "Python + ChatGPT",
+    emoji: "🐍",
+    tag: "Start here",
+  },
+  {
+    id: "prompt-engineering",
+    label: "Prompt Engineering",
+    emoji: "🧠",
+    tag: "Write better prompts",
+  },
+  {
+    id: "api-integration",
+    label: "API Integration",
+    emoji: "🔌",
+    tag: "Connect your app",
+  },
+  {
+    id: "mini-projects",
+    label: "Mini Projects",
+    emoji: "🛠️",
+    tag: "Build real examples",
+  },
 ];
 
 export const tutorAnswers = {
-  nand: {
-    quick:
-      "NAND outputs 0 only when both inputs are 1. Part number: 74LS00. Fundamental to digital logic.",
-    followUp:
-      "Any digital circuit can be built using only NAND gates. That's why it's called 'universal gate'.",
+  "python-chatgpt": {
+    title: "Python + ChatGPT starter guide",
+    keywords: ["python", "chatgpt", "openai", "gpt", "api key"],
+    body: "Use Python with the OpenAI SDK to send prompts, receive completions, and build small assistants. A strong beginner flow is to install the package, store your key safely, send one request, and then add error handling.",
+    steps: [
+      "Install the SDK with pip install openai",
+      "Keep your API key in an environment variable",
+      "Send a simple prompt and print the response",
+      "Add basic try/except error handling",
+    ],
+    example: `from openai import OpenAI
+import os
+
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+response = client.responses.create(
+    model="gpt-4.1-mini",
+    input="Explain Python decorators in simple terms."
+)
+print(response.output_text)`,
+    resources: [
+      {
+        label: "OpenAI Python quickstart",
+        url: "https://platform.openai.com/docs/quickstart",
+      },
+      {
+        label: "FreeCodeCamp Python curriculum",
+        url: "https://www.freecodecamp.org/learn/scientific-computing-with-python/",
+      },
+      {
+        label: "Python official docs",
+        url: "https://docs.python.org/3/",
+      },
+    ],
+    nextSteps: [
+      "Add a loop for a simple chat experience",
+      "Use streaming for real-time replies",
+      "Keep secrets in a .env file",
+    ],
   },
-  xor: {
-    quick:
-      "XOR (exclusive OR) outputs 1 when inputs differ. Part number: 74LS86. Common in parity checks.",
-    followUp:
-      "XOR is used in binary addition, error detection, and cryptography due to its symmetry properties.",
+  "prompt-engineering": {
+    title: "Prompt engineering essentials",
+    keywords: ["prompt", "prompting", "engineer", "better prompt"],
+    body: "Great prompts are specific, structured, and goal-focused. Tell the model the role, the task, the constraints, and the expected format so the output is more reliable.",
+    steps: [
+      "State the role clearly",
+      "Give a concrete task and context",
+      "Set output rules such as bullet points or JSON",
+      "Ask for examples when the answer needs to be practical",
+    ],
+    example: `Prompt: "You are a Python tutor. Explain list comprehensions in beginner-friendly language and include one example."`,
+    resources: [
+      {
+        label: "OpenAI prompting guide",
+        url: "https://platform.openai.com/docs/guides/prompt-engineering",
+      },
+      {
+        label: "Learn prompt engineering",
+        url: "https://www.freecodecamp.org/news/prompt-engineering-guide/",
+      },
+    ],
+    nextSteps: [
+      "Test one prompt, then refine it",
+      "Compare outputs with and without examples",
+      "Use system instructions for consistent tone",
+    ],
   },
-  "full-adder": {
-    quick:
-      "Full adder sums two bits plus a carry-in. Outputs: Sum (S) and Carry-out (Cout). Building block of CPUs.",
-    followUp:
-      "Chain full adders together to create multi-bit adders. The carry propagation speed limits frequency.",
+  "api-integration": {
+    title: "Integrating AI into your app",
+    keywords: ["api", "app", "integrate", "backend", "server"],
+    body: "Once you can send a request, the next step is shaping the experience around your app. A clean structure is to separate the prompt logic, the API client, and the UI so the assistant stays maintainable.",
+    steps: [
+      "Create a small backend endpoint",
+      "Validate user input before sending it",
+      "Return the model response in a predictable format",
+      "Handle rate limits and retries",
+    ],
+    example: `def ask_ai(prompt):
+    response = client.responses.create(
+        model="gpt-4.1-mini",
+        input=prompt
+    )
+    return response.output_text`,
+    resources: [
+      {
+        label: "OpenAI API reference",
+        url: "https://platform.openai.com/docs/api-reference",
+      },
+      {
+        label: "Build a Python chatbot",
+        url: "https://www.freecodecamp.org/news/how-to-build-a-chatbot-using-python/",
+      },
+    ],
+    nextSteps: [
+      "Create a simple Flask or FastAPI route",
+      "Add streaming for faster feedback",
+      "Save chat history for context",
+    ],
   },
-  "7-segment": {
-    quick:
-      "Seven LED segments arranged to display digits 0-9. Each segment controlled independently.",
-    followUp:
-      "Common anode vs common cathode determines if segments are ON with HIGH or LOW logic. Design choice.",
+  "mini-projects": {
+    title: "Mini projects to practice",
+    keywords: ["project", "build", "exercise", "practice"],
+    body: "The fastest way to learn is by building tiny projects. Try a study buddy, code explainer, quiz generator, or note summarizer to see the tools work end-to-end.",
+    steps: [
+      "Choose a one-feature project",
+      "Define the input and expected output",
+      "Add a small prompt template",
+      "Improve the UX with examples and buttons",
+    ],
+    example: `Example: a Python script that turns lecture notes into flashcards with three questions and answers.`,
+    resources: [
+      {
+        label: "FreeCodeCamp Python projects",
+        url: "https://www.freecodecamp.org/learn/scientific-computing-with-python/",
+      },
+      {
+        label: "Python beginner projects",
+        url: "https://www.freecodecamp.org/news/python-projects-for-beginners/",
+      },
+    ],
+    nextSteps: [
+      "Build one project this week",
+      "Share it with a friend or classmate",
+      "Add a simple UI next",
+    ],
   },
 };
 
