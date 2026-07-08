@@ -2,7 +2,7 @@
 
 **A hands-on digital logic and circuit design simulator for African students.**
 
-Built with real IC part numbers, live oscilloscope visualization, and AI-powered tutoring using Claude. No AR/VR bloat—just solid engineering education that works.
+Built with real IC part numbers, live oscilloscope visualization, and AI-powered tutoring using ChatGPT (OpenAI). No AR/VR bloat—just solid engineering education that works.
 
 ---
 
@@ -11,14 +11,17 @@ Built with real IC part numbers, live oscilloscope visualization, and AI-powered
 Exactly what the plan specified—four working screens:
 
 ### 1. **Home** — The Entry Point
+
 - **Live Animated Oscilloscope** — Real canvas-drawn dual-channel waveform with continuous sweep. Signals you'll recognize from actual test equipment
 - **Lab Modules Grid** — Shows what's free (Digital Logic Gates), what's coming soon (Circuit Analysis, Microcontrollers), and what's locked (Embedded Systems)
 - **Waitlist Form** — Captures email signups with a real-time counter showing community size (designed for social proof, starts at 1,247)
 
 ### 2. **Labs** — The Heart of Learning
+
 A fully functional digital logic gate simulator with three tabs:
 
 **Simulator Tab:**
+
 - Toggle inputs A and B live
 - Watch output update in real time
 - Truth table highlights the current input state
@@ -26,6 +29,7 @@ A fully functional digital logic gate simulator with three tabs:
 - Lab notes provide practical context
 
 **Lab Report Tab:**
+
 - Auto-generated professional report with all standard sections:
   - Objective, Apparatus, Theory
   - Truth table results
@@ -34,24 +38,28 @@ A fully functional digital logic gate simulator with three tabs:
 - Print-ready formatting
 
 **Progress Tab:**
+
 - Module completion tracking toward certificate unlock
 - Visual progress bars
 - Certificate goal display
 
-### 3. **AI Tutor (ZARA)** — Connected to Claude
+### 3. **AI Tutor (ZARA)** — Connected to ChatGPT (OpenAI)
+
 - Quick-question buttons for common topics (NAND, XOR, Full Adder, 7-Segment)
 - Pre-written fallback answers for instant responses (avoids latency on common queries)
-- Custom question support that hits Claude API for anything else
+- Custom question support that hits the OpenAI API (ChatGPT) for anything else
 - Chat interface with message history
 - Typing indicator for better UX
 
 Topics with built-in answers:
+
 - **NAND Gate** — Part 74LS00, why it's universal
 - **XOR Gate** — Part 74LS86, parity checking use case
 - **Full Adder** — Binary arithmetic, carry propagation
 - **7-Segment Display** — Common vs. common cathode logic
 
 ### 4. **Quiz** — EEE211 Exam Style
+
 - 5 questions covering digital logic fundamentals
 - Multiple choice with instant feedback
 - Detailed explanations on every answer
@@ -65,22 +73,25 @@ Topics with built-in answers:
 ## 🎨 Design Philosophy
 
 ### The Deep-Space Navy + Phosphor-Green CRT Palette
-This MVP *reads as an instrument*, not generic SaaS:
+
+This MVP _reads as an instrument_, not generic SaaS:
 
 - **Ink black background** (#0A1628) — PCB substrate color, immediate signals "hardware"
 - **Phosphor signal green** (#7DDFFF) — Primary signal, instantly recognizable from real oscilloscopes
 - **Secondary channels** — Amber (#FFD166) and mint (#A8FF78) for contrast
 - **Glowing elements** — Subtle box-shadows mimic CRT bloom
 
-The oscilloscope on the home page is the signature element. It's the first thing you see. It tells you: *"This is real engineering, not a flashcard app."*
+The oscilloscope on the home page is the signature element. It's the first thing you see. It tells you: _"This is real engineering, not a flashcard app."_
 
 ### Typography & Spacing
+
 - **IBM Plex Mono** for all readouts and code—monospace reads as "technical"
 - **Inter** for UI text—clean, approachable
 - Consistent 4px grid for spacing (xs: 4px, huge: 20px)
 - Rounded corners at 4–10px for softer feel while keeping the technical vibe
 
 ### Interactive Feedback
+
 - Live truth table highlighting as you toggle inputs
 - Output value glows when HIGH, dims when LOW
 - Button state changes are immediate (no unnecessary delays)
@@ -128,7 +139,8 @@ src/
 ## 🚀 Getting Started
 
 ### Prerequisites
-- Node.js 16+ 
+
+- Node.js 16+
 - React 18+
 - A way to run React (Vite, Create React App, etc.)
 
@@ -146,6 +158,7 @@ npm run dev
 ```
 
 ### First Launch
+
 1. You'll land on **Home**
 2. See the animated oscilloscope in action
 3. Check out the module grid (only "Digital Logic" is unlocked)
@@ -159,52 +172,58 @@ npm run dev
 
 ---
 
-## 🔌 Claude API Integration (AI Tutor)
+## 🔌 ChatGPT / OpenAI Integration (AI Tutor)
 
-The tutor is designed to work with Claude API but *doesn't require it* to function:
+The tutor works with ChatGPT (OpenAI) for custom questions but falls back to pre-written answers for common topics so the UI stays fast.
 
 ### Quick Questions (Pre-written)
-These return instantly:
+
+These return instantly (no API call):
+
 - NAND Gate explanation + IC part
 - XOR Gate use cases
 - Full Adder binary arithmetic
 - 7-Segment display logic
 
-No API call needed—ultra-fast.
-
 ### Custom Questions
-Hit the Claude API with the user's question:
+
+The tutor sends user questions to the OpenAI Responses API (server-side proxy recommended). Example server-side call (Node/Express):
 
 ```javascript
-// In AITutor.jsx (sketch)
-const response = await fetch('https://api.anthropic.com/v1/messages', {
-  method: 'POST',
+// server/routes/ai.js (sketch)
+const resp = await fetch("https://api.openai.com/v1/responses", {
+  method: "POST",
   headers: {
-    'x-api-key': import.meta.env.VITE_CLAUDE_API_KEY,
-    'content-type': 'application/json',
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
   },
   body: JSON.stringify({
-    model: 'claude-3-5-sonnet-20241022',
-    max_tokens: 1024,
-    messages: [{ role: 'user', content: userQuestion }],
+    model: "gpt-4o-mini",
+    input: userPrompt,
+    max_output_tokens: 800,
   }),
 });
+const data = await resp.json();
+// return data to frontend
 ```
 
-Set `VITE_CLAUDE_API_KEY` in your `.env` file to enable full tutor functionality.
+Set `OPENAI_API_KEY` in your server `.env` (not in the frontend `.env`) to keep the key secret. Do NOT commit API keys to the repository or include them in the public README.
 
 ---
 
 ## 📊 Data Flow
 
 ### Sorting & Organization
+
 - Navigation is sorted by user journey (Home → Labs → Tutor → Quiz)
 - Quiz questions are ordered by difficulty (gates → ICs → combinational logic)
 - Lab modules are grouped by tier (free → coming-soon → locked)
 - Truth tables are naturally ordered (00, 01, 10, 11 for 2-input gates)
 
 ### State Management
+
 Each page maintains its own state:
+
 - **Home:** Email, signup count
 - **Labs:** Selected gate, input A/B, active tab
 - **Tutor:** Chat conversation history, loading state
@@ -217,30 +236,36 @@ No global state needed for MVP—keep it simple.
 ## 🛠️ Extending the MVP
 
 ### Add More Logic Gates
+
 1. Edit [utils/logicGates.js](utils/logicGates.js) — add the gate function
 2. Update [constants/mockData.js](constants/mockData.js) — add to `logicGates` array
 3. Gate selector in [pages/Labs.jsx](pages/Labs.jsx) auto-discovers new gates
 
 ### Add New Lab Modules
+
 1. Create new page (e.g., `pages/CircuitLab.jsx`)
 2. Import in [App.jsx](App.jsx)
 3. Add navigation item in [constants/mockData.js](constants/mockData.js)
 4. Update Sidebar route matching
 
 ### Customize Colors
+
 All colors are CSS variables in [styles/global.css](styles/global.css). Change `:root` definitions:
+
 ```css
 :root {
-  --signal: #7ddfff;      /* Primary glow */
-  --signal2: #ffd166;     /* Secondary */
-  --signal3: #a8ff78;     /* Tertiary */
-  --red: #ff6b6b;         /* Error states */
+  --signal: #7ddfff; /* Primary glow */
+  --signal2: #ffd166; /* Secondary */
+  --signal3: #a8ff78; /* Tertiary */
+  --red: #ff6b6b; /* Error states */
   /* ... etc */
 }
 ```
 
 ### Add More Quiz Questions
+
 Edit [constants/mockData.js](constants/mockData.js) — `quizQuestions` array:
+
 ```javascript
 {
   id: 6,
@@ -252,11 +277,14 @@ Edit [constants/mockData.js](constants/mockData.js) — `quizQuestions` array:
 ```
 
 ### Connect Real Claude API
+
 1. Get your API key from [console.anthropic.com](https://console.anthropic.com)
 2. Create `.env` file:
+
 ```
 VITE_CLAUDE_API_KEY=sk-ant-...
 ```
+
 3. Uncomment the API call in `AITutor.jsx`
 4. Remove the fallback logic (or keep it for speed on known topics)
 
@@ -265,6 +293,7 @@ VITE_CLAUDE_API_KEY=sk-ant-...
 ## 📱 Responsive Behavior
 
 The layout adapts below 1024px:
+
 - **Tutor chat** switches to single column
 - **Simulator** stacks controls below (not left sidebar)
 - **Sidebar** becomes top nav bar on mobile (<768px)
@@ -276,6 +305,7 @@ CSS is mobile-first with media queries at the bottom of [styles/global.css](styl
 ## 🎓 What Was Left Out (Intentionally)
 
 Per the plan, MVP excludes:
+
 - **AR/VR** — Not needed for core learning
 - **Hardware integration** — Simulator is enough for software learning
 - **Subscription billing** — Use Claude API call quotas instead
@@ -320,6 +350,7 @@ LabSim Africa MVP - Educational Use
 ## 🙋 Support
 
 **For questions about:**
+
 - **The design** — See the CRT/oscilloscope palette rationale above
 - **Adding features** — Check "Extending the MVP" section
 - **API integration** — Claude API docs at [docs.anthropic.com](https://docs.anthropic.com)
@@ -330,6 +361,7 @@ LabSim Africa MVP - Educational Use
 ## 🎯 Success Metrics (Phase 1)
 
 We'll know this MVP works when:
+
 1. ✅ Users can simulate logic gates without confusion
 2. ✅ Lab reports are usable (could be printed/shared)
 3. ✅ Quiz gives meaningful feedback (users want to retake and improve)
@@ -338,6 +370,6 @@ We'll know this MVP works when:
 
 ---
 
-**Built for African students. Designed to feel like real lab equipment. Powered by Claude.**
+**Built for African students. Designed to feel like real lab equipment. Powered by ChatGPT (OpenAI).**
 
 LabSim Africa MVP — v1.0
